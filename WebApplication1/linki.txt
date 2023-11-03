@@ -1,3 +1,6 @@
 13 zajêcia - Kody HTTP na koñcu nagrania (https://www.udemy.com/course/praktyczny-kurs-aspnet-core-rest-web-api-od-podstaw/learn/lecture/24816936#overview)
 
-Migracja bazy komenda - add-migration Init (Narzêdzia -> Mened¿er Pakietów NuGet -> Konsola Mened¿era Pakietów)
+Migracja bazy komenda - add-migration Init (Narzêdzia -> Mened¿er Pakietów NuGet -> Konsola Mened¿era Pakietów) Init - to nazwa migracji
+update-database - By utworzyæ bazê danych lub zmiana struktury
+
+Dto - Data Transfer Object, typ do komunikacji z klientem
