@@ -4,3 +4,5 @@ Migracja bazy komenda - add-migration Init (Narzêdzia -> Mened¿er Pakietów NuGet
 update-database - By utworzyæ bazê danych lub zmiana struktury
 
 Dto - Data Transfer Object, typ do komunikacji z klientem
+
+https://codecouple.pl/2017/06/09/15-spring-boot-post-put-czy-patch/ <- Put a Patch

@@ -1,6 +1,7 @@
 using WebApplication1;
 using WebApplication1.Entities;
 using System.Reflection;
+using WebApplication1.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<RestaurantSeeder>(); // Zale¿noœæ typu Scoped
+builder.Services.AddScoped<IRestaurantService, RestaurantService>(); // Dodanie Serwisu
 builder.Services.AddDbContext<RestaurantDbContext>();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
