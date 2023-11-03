@@ -9,7 +9,7 @@ namespace WebApplication1
         public RestaurantMappingProfile()
         {
             // Jeśli typy i nazwy się zgadzają to AutoMapper automatycznie je zmapuje
-            CreateMap<Restaurant, RestaurantDto>()
+            CreateMap<Restaurant, RestaurantDto>() // Z jakiej klasy na jaką chcemy zmapować
                 .ForMember(m => m.City, c => c.MapFrom(s => s.Address.City))
                 .ForMember(m => m.Street, c => c.MapFrom(s => s.Address.Street))
                 .ForMember(m => m.PostalCode, c => c.MapFrom(s => s.Address.PostalCode));
@@ -20,6 +20,8 @@ namespace WebApplication1
                 .ForMember(r => r.Address, 
                 c => c.MapFrom(dto => new Address() 
                 { City = dto.City, PostalCode = dto.PostalCode, Street = dto.Street }));
+
+            CreateMap<CreateDishDto, Dish>(); // Nazwy pól i typy się pokrywają to bez ForMember
         }
     }
 }

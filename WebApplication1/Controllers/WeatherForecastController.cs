@@ -23,7 +23,7 @@ namespace WebApplication1.Controllers
             return result;
         }
 
-        [HttpGet(Name = "GetWeatherForecast")]
+        [HttpGet]
         [Route("currentDay/{max}")] // /WeatherForecast/currentDay/15?take=10
         public IEnumerable<WeatherForecast> Get2([FromQuery]int take, [FromRoute]int max)
         {
