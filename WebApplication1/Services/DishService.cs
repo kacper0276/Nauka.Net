@@ -11,6 +11,8 @@ namespace WebApplication1.Services
         int Create(int restaurantId, CreateDishDto dto);
         DishDto GetById(int restaurantId, int dishId);
         List<DishDto> GetAll(int restaurantId);
+        void RemoveAll(int restaurantId);
+        void Remove(int restaurantId, int dishId);
     }
 
     public class DishService : IDishService
@@ -26,12 +28,7 @@ namespace WebApplication1.Services
 
         public int Create(int restaurantId, CreateDishDto dto)
         {
-            var restaurant = _context
-                .Restaurants
-                .FirstOrDefault(r => r.Id == restaurantId);
-
-            if (restaurant is null)
-                throw new NotFoundException("Restaurant not found");
+            var restaurant = GetRestaurantById(restaurantId);
 
             var dishEntity = _mapper.Map<Dish>(dto);
 
@@ -45,12 +42,7 @@ namespace WebApplication1.Services
 
         public DishDto GetById(int restaurantId, int dishId)
         {
-            var restaurant = _context
-                .Restaurants
-                .FirstOrDefault(r => r.Id == restaurantId);
-
-            if (restaurant is null)
-                throw new NotFoundException("Restaurant not found");
+            var restaurant = GetRestaurantById(restaurantId);
 
             var dish = _context.Dishes.FirstOrDefault(d => d.Id == dishId);
             
@@ -65,6 +57,36 @@ namespace WebApplication1.Services
 
         public List<DishDto> GetAll(int restaurantId)
         {
+            var restaurant = GetRestaurantById(restaurantId);
+
+            var dishDto = _mapper.Map<List<DishDto>>(restaurant.Dishes);
+            
+            return dishDto;
+        }
+
+        public void RemoveAll(int restaurantId)
+        {
+            var restaurant = GetRestaurantById(restaurantId);
+
+            _context.RemoveRange(restaurant.Dishes);
+            _context.SaveChanges();
+        }
+
+        public void Remove(int restaurantId, int dishId)
+        {
+            var restaurant = GetRestaurantById(restaurantId);
+
+            var dish = _context.Dishes.FirstOrDefault(d => d.Id == dishId);
+
+            if (dish is null || dish.RestaurantId != restaurantId)
+                throw new NotFoundException("Dish not found");
+
+            _context.Dishes.Remove(dish);
+            _context.SaveChanges();
+        }
+
+        private Restaurant GetRestaurantById(int restaurantId)
+        {
             var restaurant = _context
                 .Restaurants
                 .Include(r => r.Dishes) // Dla tej restauracji chcemy dorzucić jej dania
@@ -73,9 +95,7 @@ namespace WebApplication1.Services
             if (restaurant is null)
                 throw new NotFoundException("Restaurant not found");
 
-            var dishDto = _mapper.Map<List<DishDto>>(restaurant.Dishes);
-            
-            return dishDto;
+            return restaurant;
         }
     }
 }
