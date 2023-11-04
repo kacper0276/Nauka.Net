@@ -68,6 +68,7 @@ builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 // Validator
 builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
+builder.Services.AddScoped<IValidator<RestaurantQuery>, RestaurantQueryValidator>();
 
 // Hashowanie Has³a
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();

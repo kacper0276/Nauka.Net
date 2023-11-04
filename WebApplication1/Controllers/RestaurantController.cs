@@ -54,9 +54,9 @@ public class RestaurantController : ControllerBase
         [HttpGet]
         [Authorize(Policy = "HasNationality,Atleast20,CreatedAtleast2Restaurants")]
         // [Authorize] // Po prostu zalogowany - niezależnie od klasy usera
-        public ActionResult<IEnumerable<RestaurantDto>> GetAll()
+        public ActionResult<IEnumerable<RestaurantDto>> GetAll([FromQuery] RestaurantQuery query)
         {
-            var restaurantsDtos = _restaurantService.GetAll();
+            var restaurantsDtos = _restaurantService.GetAll(query);
 
             return Ok(restaurantsDtos);
         }
