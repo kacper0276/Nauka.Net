@@ -11,6 +11,8 @@ using WebApplication1.Models.Validators;
 using FluentValidation.AspNetCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using WebApplication1.Authorization;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +40,17 @@ builder.Services.AddAuthentication(option =>
     };
 });
 
+// W³asne warunki autoryzacji
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("HasNationality", builder => builder.RequireClaim("Nationality", "German", "Polish")); // Wartoœci jakie musi przyj¹æ
+    options.AddPolicy("Atleast20", builder => builder.AddRequirements(new MinimumAgeRequirement(20))); // W³asny, musi mieæ conajmniej 20 lat
+    options.AddPolicy("CreatedAtleast2Restaurants", builder => builder.AddRequirements(new CreatedMultipleRestaurantsRequirement(2))); // Co najmniej 2 restauracje
+});
+builder.Services.AddScoped<IAuthorizationHandler, MinimumAgeRequirementHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, ResourceOperationRequirementHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, CreatedMultipleRestaurantsRequirementHandler>();
+
 // Add services to the container.
 builder.Services.AddTransient<IWeatherForecastService, WeatherForecastService>();
 builder.Services.AddControllers().AddFluentValidation(); // FluentValidation <- paczka do tworzenia validacji
@@ -48,6 +61,8 @@ builder.Services.AddScoped<IDishService, DishService>(); // Dodanie serwisu
 builder.Services.AddScoped<RestaurantSeeder>(); // Zale¿noœæ typu Scoped
 builder.Services.AddScoped<IRestaurantService, RestaurantService>(); // Dodanie Serwisu
 builder.Services.AddScoped<IAccountService, AccountService>(); // Dodanie serwisu
+builder.Services.AddScoped<IUserContextService,  UserContextService>();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddDbContext<RestaurantDbContext>();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
