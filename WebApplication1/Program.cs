@@ -77,6 +77,19 @@ builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped<RequestTimeMiddleware>();
 
+// Add Cors
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("FrontEndClient", policyBuilder =>
+    policyBuilder
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .WithOrigins(builder.Configuration["AllowedOrigins"])
+    // Dowolna .AllowAnyOrigin()
+    );
+});
+
+// NLog
 builder.Host.UseNLog();
 
 var app = builder.Build();
@@ -95,6 +108,8 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Restaurant API");
     });
 }
+
+app.UseCors("FrontEndClient");
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseMiddleware<RequestTimeMiddleware>();
