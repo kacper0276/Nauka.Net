@@ -109,6 +109,10 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+// Static files
+app.UseStaticFiles(); // domyœlny katalog to wwwroot
+
+// Cors
 app.UseCors("FrontEndClient");
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
