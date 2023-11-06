@@ -109,6 +109,9 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+// Cache
+app.UseResponseCaching();
+
 // Static files
 app.UseStaticFiles(); // domyœlny katalog to wwwroot
 

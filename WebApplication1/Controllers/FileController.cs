@@ -8,6 +8,8 @@ namespace WebApplication1.Controllers
     [Authorize]
     public class FileController : ControllerBase
     {
+        [HttpGet]
+        [ResponseCache(Duration = 1200, VaryByQueryKeys = new[] { "fileName" })]
         public ActionResult GetFile([FromQuery] string fileName)
         {
             var rootPath = Directory.GetCurrentDirectory();
@@ -26,6 +28,24 @@ namespace WebApplication1.Controllers
             var fileContents = System.IO.File.ReadAllBytes(filePath);
 
             return File(fileContents, fileType, fileName);
+        }
+
+        [HttpPost]
+        public ActionResult Upload([FromForm] IFormFile file)
+        {
+            if(file != null && file.Length > 0)
+            {
+                var rootPath = Directory.GetCurrentDirectory();
+                var filename = file.FileName;
+                var fullPath = $"{rootPath}/PrivateFiles/{filename}";
+                using(var stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    file.CopyTo(stream);
+                }
+
+                return Ok();
+            }
+            return BadRequest();
         }
     }
 }
